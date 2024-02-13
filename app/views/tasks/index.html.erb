@@ -1,14 +1,69 @@
-<p style="color: green"><%= notice %></p>
+<div class="row pt-5">
+    <div class="col text-center">
+        <button class="btn btn-primary" data-mdb-modal-init data-mdb-ripple-init  data-mdb-target="#TaskModal" id="addTaskButton">Add
+            task</button>
+    </div>
+  </div>
 
-<h1>Tasks</h1>
+  <div id="tasks">
+      <!-- List of tasks -->
+      <div class="row mt-3 p-5">
+          <div class="col d-flex justify-content-center align-items-center">
+              <ul class="list-group list-group-light" style="min-width: 22rem;">
+                  <% @tasks.each do |task| %>
+                  <li class="list-group-item d-flex justify-content-between align-items-center gap-5" id="<%= task.id %>">
+                      <%= render task %>
+                      <div class="d-flex align-items-center">
+                          <button class="btn btn-primary btn-floating me-2" data-mdb-modal-init data-mdb-ripple-init
+                              data-mdb-target="#TaskModal" id="addTaskButton"
+                              onclick="setModalValues(<%= task.id %>)"><span class="fas fa-pen text-white"
+                                  title="edit"></span></button>
+                          <%= button_to task, method: :delete, class:"btn btn-danger btn-floating", "data-mdb-ripple-init" => true do%>
+                          <span class="fas fa-trash text-white" title="delete"></span>
+                      <% end %>
+                      </div>
+                  </li>
+                  <% end %>
+          </div>
+      </div>
+  </div>
 
-<div id="tasks">
-  <% @tasks.each do |task| %>
-    <%= render task %>
-    <p>
-      <%= link_to "Show this task", task %>
-    </p>
-  <% end %>
-</div>
 
-<%= link_to "New task", new_task_path %>
+  <!-- Modal Add -->
+  <div class="modal fade" id="TaskModal" tabindex="-1" aria-labelledby="TaskModalLabel" aria-hidden="true"
+      data-mdb-backdrop="false">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="taskModalLabel">Add task</h5>
+                  <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <%= render "form", task: @task, method: :post %>
+          </div>
+      </div>
+  </div>
+
+<script>
+    taskForm = document.querySelector("#TaskModal form");
+    taskModalLabel = document.getElementById('taskModalLabel');
+    editNameInput = document.getElementById('editNameInput');
+    editDescInput = document.getElementById('editDescInput');
+
+
+    function setModalValues(id) {
+        taskModalLabel.innerText = 'Edit task';
+        const task = document.getElementById(id)
+        editNameInput.value = task.querySelector('.name').innerText;
+        editDescInput.value = task.querySelector('.desc').innerText;
+        taskForm.action = `/tasks/${id}`;
+        taskForm.method = 'put';
+    }
+
+    addTaskButton = document.querySelector('#addTaskButton');
+    addTaskButton.addEventListener('click', () => {
+        taskModalLabel.innerText = 'Add task';
+        taskForm.reset();
+        taskForm.action = `/tasks`;
+        taskForm.method = 'post';
+    })
+</script>

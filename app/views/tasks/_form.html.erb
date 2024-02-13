@@ -1,27 +1,17 @@
-<%= form_with(model: task) do |form| %>
-  <% if task.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(task.errors.count, "error") %> prohibited this task from being saved:</h2>
+<%= form_with(model: task) do |form|  %>
+  <div class="modal-body">
+      <div class="form-outline mb-4" data-mdb-input-init>
+          <%= form.text_field :name, class: "form-control", id: "editNameInput" %>
+          <%= form.label :name, class: "form-label", for: "editNameInput" %>
+      </div>
 
-      <ul>
-        <% task.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_area :name %>
+      <div class="form-outline mb-4" data-mdb-input-init>
+          <%= form.text_field :description, class: "form-control", id: "editDescInput"%>
+          <%= form.label :description, class: "form-label", for: "editDescInput" %>
+      </div>
   </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" data-mdb-ripple-init>Close</button>
+      <%= form.button "Save", type: "submit", class: "btn btn-primary", id: "confirmButton", "data-mdb-ripple-init" => true %>
   </div>
 <% end %>
