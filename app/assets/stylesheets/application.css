@@ -13,4 +13,5 @@
  *= require_tree .
  *= require_self
  */
-@import "mdb5-free-standard/css/mdb.min.css"
+/* @import "mdb5-free-standard/css/mdb.min.css" */
+require "mdb.min.css"
